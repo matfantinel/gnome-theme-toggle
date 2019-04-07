@@ -4,8 +4,9 @@ const Ornament = imports.ui.popupMenu.Ornament;
 const Util = imports.misc.util;
 const St = imports.gi.St;
 
-const LIGHT_THEME_NAME = "AdwaitaRefresh";
-const DARK_THEME_NAME = "AdwaitaRefresh-dark";
+const GTK_THEME_NAME = null;
+const LIGHT_THEME_NAME = "Adwaita";
+const DARK_THEME_NAME = "Adwaita-dark";
 
 function init() {}
 
@@ -16,7 +17,7 @@ function enable() {
     this.mainMenu.addMenuItem(themeMenu, 8);
     this.themeMenu.icon.icon_name = "starred-symbolic";
 
-    this.light = new PopupMenu.PopupMenuItem("Light");
+    this.light = new PopupMenu.PopupMenuItem(LIGHT_THEME_NAME);
     this.light.connect('activate', (item, event) => {
         this.reset_ornament();
         this.set_theme(LIGHT_THEME_NAME);
@@ -24,7 +25,7 @@ function enable() {
     });
     this.themeMenu.menu.addMenuItem(this.light, 0);
 
-    this.dark = new PopupMenu.PopupMenuItem("Dark");
+    this.dark = new PopupMenu.PopupMenuItem(DARK_THEME_NAME);
     this.dark.connect('activate', (item, event) => {
         this.reset_ornament();
         this.set_theme(DARK_THEME_NAME);
@@ -36,7 +37,9 @@ function enable() {
 }
 
 function set_theme(theme) {
-    // set_gtk_theme(theme);
+    if (GTK_THEME_NAME) {
+        set_gtk_theme(theme);
+    }
     set_user_theme(theme);
     set_theme_label(theme);
 }
