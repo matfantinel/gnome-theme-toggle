@@ -42,6 +42,7 @@ function set_theme(theme) {
     }
     set_user_theme(theme);
     set_theme_label(theme);
+    set_firefox_theme(theme);
 }
 
 function set_theme_label(theme){
@@ -56,6 +57,14 @@ function set_gtk_theme(theme) {
 
 function set_user_theme(theme) {
     Util.trySpawn(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "'" + theme +"'"]);
+}
+
+function set_firefox_theme(theme) {
+    if (theme == LIGHT_THEME_NAME) {
+        Util.trySpawn(['/bin/bash', '-c', "cp -rf ~/.mozilla/firefox/7abszo2d.default/chrome/firefox-gnome-theme/userChrome-light.css ~/.mozilla/firefox/7abszo2d.default/chrome/firefox-gnome-theme/userChrome.css"])
+    } else {
+        Util.trySpawn(['/bin/bash', '-c', "cp -rf ~/.mozilla/firefox/7abszo2d.default/chrome/firefox-gnome-theme/userChrome-dark.css ~/.mozilla/firefox/7abszo2d.default/chrome/firefox-gnome-theme/userChrome.css"])
+    }
 }
 
 function reset_ornament() {
