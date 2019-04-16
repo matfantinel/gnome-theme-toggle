@@ -7,6 +7,7 @@ const St = imports.gi.St;
 const GTK_THEME_NAME = null;
 const LIGHT_THEME_NAME = "Adwaita";
 const DARK_THEME_NAME = "Adwaita-dark";
+const CHANGE_FIREFOX_THEME = false;
 
 function init() {}
 
@@ -42,7 +43,9 @@ function set_theme(theme) {
     }
     set_user_theme(theme);
     set_theme_label(theme);
-    set_firefox_theme(theme);
+    if (CHANGE_FIREFOX_THEME) {
+        set_firefox_theme(theme);        
+    }
 }
 
 function set_theme_label(theme){
