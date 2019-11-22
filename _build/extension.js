@@ -4,10 +4,18 @@ const Ornament = imports.ui.popupMenu.Ornament;
 const Util = imports.misc.util;
 const St = imports.gi.St;
 
-const GTK_THEME_NAME = null;
-const LIGHT_THEME_NAME = "Adwaita";
-const DARK_THEME_NAME = "Adwaita-dark";
 const CHANGE_FIREFOX_THEME = false;
+
+const CHANGE_ICON_THEME = true;
+const ICON_LIGHT_THEME_NAME = "ZorinBlue-Light";
+const ICON_DARK_THEME_NAME = "ZorinBlue-Dark";
+
+const CHANGE_SHELL_THEME = true;
+const SHELL_LIGHT_THEME_NAME = "ZorinBlue-Light";
+const SHELL_DARK_THEME_NAME = "ZorinBlue-Dark";
+
+const LIGHT_THEME_NAME = "ZorinBlue-Light";
+const DARK_THEME_NAME = "ZorinBlue-Dark";
 
 function init() {}
 
@@ -18,18 +26,18 @@ function enable() {
     this.mainMenu.addMenuItem(themeMenu, 8);
     this.themeMenu.icon.icon_name = "starred-symbolic";
 
-    this.light = new PopupMenu.PopupMenuItem(LIGHT_THEME_NAME);
+    this.light = new PopupMenu.PopupMenuItem("Light");
     this.light.connect('activate', (item, event) => {
         this.reset_ornament();
-        this.set_theme(LIGHT_THEME_NAME);
+        this.set_theme("light");
         item.setOrnament(Ornament.DOT);
     });
     this.themeMenu.menu.addMenuItem(this.light, 0);
 
-    this.dark = new PopupMenu.PopupMenuItem(DARK_THEME_NAME);
+    this.dark = new PopupMenu.PopupMenuItem("Dark");
     this.dark.connect('activate', (item, event) => {
         this.reset_ornament();
-        this.set_theme(DARK_THEME_NAME);
+        this.set_theme("dark");
         item.setOrnament(Ornament.DOT);
     });
     this.themeMenu.menu.addMenuItem(this.dark, 1);
@@ -37,12 +45,16 @@ function enable() {
     this.reset_ornament();
 }
 
-function set_theme(theme) {
-    if (GTK_THEME_NAME) {
-        set_gtk_theme(theme);
+function set_theme(theme) {    
+    set_user_theme(theme == "light" ? LIGHT_THEME_NAME : DARK_THEME_NAME);
+
+    if (CHANGE_SHELL_THEME) {        
+        set_gtk_theme(theme == "light" ? SHELL_LIGHT_THEME_NAME : SHELL_DARK_THEME_NAME);
     }
-    set_user_theme(theme);
-    set_theme_label(theme);
+    if (CHANGE_ICON_THEME) {        
+        set_icon_theme(theme == "light" ? ICON_LIGHT_THEME_NAME : ICON_DARK_THEME_NAME);
+    }
+
     if (CHANGE_FIREFOX_THEME) {
         set_firefox_theme(theme);        
     }
@@ -60,6 +72,10 @@ function set_gtk_theme(theme) {
 
 function set_user_theme(theme) {
     Util.trySpawn(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "'" + theme +"'"]);
+}
+
+function set_icon_theme(theme) {
+    Util.trySpawn(["dconf", "write", "/org/gnome/desktop/interface/icon-theme", "'" + theme +"'"]);
 }
 
 function set_firefox_theme(theme) {
